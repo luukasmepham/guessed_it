@@ -15,7 +15,7 @@ def index():
 def new_question():
 
     try:
-        conn = psycopg2.connect(DATABASE_URL)
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
         cur = conn.cursor()
 
         cur.execute("SELECT description FROM descriptions WHERE id = %s", ("1"))
