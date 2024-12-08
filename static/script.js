@@ -1,14 +1,22 @@
-const correctAnswer = "secret_answer"; // Replace with your desired correct answer
 const textBox = document.querySelector('.text-box');
 const inputContainer = document.getElementById('input-container');
 
-function initializeInput() {
+
+async function fetchData() {
+    const response = await fetch('/new_question');
+    const data = await response.json();
+    return data;
+  }
+
+async function initializeInput() {
+    const data = await fetchData();
+
+    textBox.textContent = data.description;
+
     inputContainer.innerHTML = `
         <input type="text" id="input-field" placeholder="Enter your guess here">
         <button id="search-button">Search</button>
     `;
-
-    textBox.textContent = "This is where the descriptive hint will be displayed.";
 
     const inputField = document.getElementById('input-field');
     const searchButton = document.getElementById('search-button');
@@ -20,14 +28,13 @@ function initializeInput() {
     });
 
 
-    searchButton.addEventListener('click', () => {
+    searchButton.addEventListener('click', async () => {
         const userInput = inputField.value;
+        const data = await fetchData();
 
-        if (userInput === correctAnswer) {
+        if (data.answers.includes(userInput)) {
             textBox.textContent = "Answer was correct, do you want to play again?";
             inputContainer.innerHTML = '<button id="play-again">Play again</button>';
-
-            // Add event listener for the "Play again" button
             const playAgainButton = document.getElementById('play-again');
             playAgainButton.addEventListener('click', initializeInput);
         } else {
