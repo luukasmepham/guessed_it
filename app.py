@@ -1,6 +1,7 @@
 import os
 from flask import Flask, jsonify, render_template
 import psycopg2
+from datetime import date
 
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
@@ -15,13 +16,21 @@ def index():
 def new_question():
 
     try:
+        today = date.today().strftime('%d%m%Y')
+
         conn = psycopg2.connect(DATABASE_URL, sslmode='require')
         cur = conn.cursor()
 
-        cur.execute("SELECT description FROM descriptions WHERE id = %s", ("1"))
-        description = cur.fetchone()[0]
+        cur.execute("SELECT description, id FROM descriptions WHERE date = %s", (today,))
+        row = description = cur.fetchone()
+
+        if not row:
+            return jsonify({'error': 'No description found for today'}), 404
     
-        cur.execute("SELECT answer FROM answers WHERE description_id = %s", ("1"))
+        description = row[0]
+        description_id = row[1]
+
+        cur.execute("SELECT answer FROM answers WHERE description_id = %s", (description_id,))
         answers = [row[0] for row in cur.fetchall()]
     
         cur.close() 
