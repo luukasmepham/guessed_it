@@ -33,8 +33,8 @@ async function initializeInput() {
         const data = await fetchData();
 
         if (data.answers.includes(userInput)) {
-            textBox.textContent = "Answer was correct, do you want to play again?";
-            inputContainer.innerHTML = '<button id="play-again">Play again</button>';
+            textBox.textContent = "Correct! You can return tomorrow for a new question.";
+            inputContainer.innerHTML = '<button id="play-again">Back to todays question</button>';
             const playAgainButton = document.getElementById('play-again');
             playAgainButton.addEventListener('click', initializeInput);
         } else {
