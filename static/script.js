@@ -15,7 +15,7 @@ async function initializeInput() {
 
     inputContainer.innerHTML = `
         <input type="text" id="input-field" placeholder="Enter your guess here">
-        <button id="search-button">Search</button>
+        <button id="search-button">Guess</button>
     `;
 
     const inputField = document.getElementById('input-field');
